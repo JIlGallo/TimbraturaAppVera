@@ -1,0 +1,48 @@
+﻿@page "/timbratureavvenute"
+@using TimbratureApp.Service
+@using static TimbratureApp.Pages.Timbratura
+@inject TimbratureService TimbratureService
+
+
+
+<div style="font-family: 'Franklin Gothic'" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8"> 
+            <div class="card shadow-lg rounded-3">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Timbrature Avvenute</h3>
+                </div>
+                <div class="card-body p-4">
+                    @if (TimbratureService.Timbrature.Any())
+                    {
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data e Ora</th>
+                                    <th>Latitudine</th>
+                                    <th>Longitudine</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var timbratura in TimbratureService.Timbrature)
+                                {
+                                    <tr>
+                                        <td>@timbratura.DataOra.ToString("dddd, d MMMM yyyy - HH:mm:ss")</td>
+                                        <td>@timbratura.Latitudine</td>
+                                        <td>@timbratura.Longitudine</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-center">Nessuna timbratura avvenuta.</p> 
+                    }
+                </div>
+                <NavLink class="btn btn-warning d-block mx-auto" href="/timbratura">Torna alla pagina delle timbrature</NavLink>
+<br />
+            </div>
+        </div>
+    </div>
+</div>

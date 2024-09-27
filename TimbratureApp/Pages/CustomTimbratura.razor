@@ -1,0 +1,143 @@
+﻿@page "/customtimbratura"
+@using System.Timers
+@using TimbratureApp.Service
+@inject IJSRuntime JSRuntime
+@inject TimbratureService TimbratureService
+@inject NavigationManager navigationManager;
+
+<div style="font-family: 'Franklin Gothic'" class="container my-5">
+    <h1 class="display-4 text-center mb-4">Timbratura perzonalizzata</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg rounded-3">
+                <div class="card-body p-4">
+                    <div class="form-group">
+                        <label for="datetime-picker">Scegli data e ora:</label>
+                        <input type="datetime-local" id="datetime-picker" class="form-control" @bind="DataOraSelezionata" />
+                        <br />
+                    </div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            @if (_coordinates != null)
+                            {
+                                <tr>
+                                    <td class="info-label">Coordinate:</td>
+                                    <td class="info-value">
+                                        Latitudine: @_coordinates.Latitude / Longitudine: @_coordinates.Longitude
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (_error != null)
+                    {
+                        <div class="alert alert-danger text-center" role="alert">
+                            Error: @_error
+                        </div>
+                    }
+                    else if (_coordinates == null)
+                    {
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    }
+                    <button class="btn btn-primary d-block mx-auto mt-3" @onclick="Timbra">Timbra</button>
+                    <br />
+                    @if (MostraMessaggioSuccesso)
+                    {
+                        <p style="text-align:center;color:green">@messaggioSuccesso</p>
+                    }
+                    <br />
+                    <NavLink class="btn btn-warning d-block mx-auto" href="/timbratura">Torna alla pagina delle timbrature</NavLink>
+                    <br />
+                    <NavLink class="btn btn-danger d-block mx-auto" href="/timbratureavvenute">Vai alle timbrature avvenute</NavLink>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private GeolocationCoordinates? _coordinates;
+    private string? _error;
+    private Timer? _timer;
+    private DateTime DataOraSelezionata = DateTime.Now;
+    public string messaggioSuccesso = "";
+    private bool MostraMessaggioSuccesso = false;
+    private Timer? _timerMessaggio;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _coordinates = await JSRuntime.InvokeAsync<GeolocationCoordinates>(
+                "eval",
+                        @"(function() {
+                    return new Promise((resolve, reject) => {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    resolve({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude,
+                                    });
+                                },
+                                (error) => {
+                                    reject(error.message);
+                                }
+                            );
+                        } else {
+                            reject('Geolocation is not supported by this browser.');
+                        }
+                    });
+                })()"
+            );
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+    }
+
+    private void Timbra()
+    {
+        if (_coordinates != null)
+        {
+            TimbratureService.Timbrature.Add(new TimbraturaPersona
+                {
+                    DataOra = DataOraSelezionata,
+                    Latitudine = _coordinates.Latitude,
+                    Longitudine = _coordinates.Longitude,
+                    IdUtente = 1 // Sostituisci con il tuo metodo per ottenere l'ID utente
+                });
+
+            messaggioSuccesso = "Timbratura salvata con successo!";
+            MostraMessaggioSuccesso = true; // Mostra il messaggio
+
+            // Imposta il timer per nascondere il messaggio dopo 1 secondo
+            _timerMessaggio = new Timer(2000);
+            _timerMessaggio.Elapsed += (sender, e) =>
+            {
+                MostraMessaggioSuccesso = false; // Nascondi il messaggio
+                InvokeAsync(StateHasChanged); // Aggiorna l'interfaccia utente
+                _timerMessaggio.Dispose(); // Smaltisci il timer
+            };
+            _timerMessaggio.Start();
+
+            StateHasChanged();
+        }
+        else
+        {
+            _error = "Coordinate non disponibili";
+        }
+    }
+
+    public class GeolocationCoordinates
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
