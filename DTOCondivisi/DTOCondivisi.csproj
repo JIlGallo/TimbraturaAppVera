@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.DataAccessLayer\it.Mifram.Dieci3k.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.DataTrasportObject\it.Mifram.Dieci3k.DataTrasportObject.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.Enums.NetSt\it.Mifram.Dieci3k.Enums.NetSt.csproj" />
+  </ItemGroup>
+
+</Project>

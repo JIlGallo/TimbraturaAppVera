@@ -1,65 +1,75 @@
 ﻿@page "/customtimbratura"
 @using System.Timers
+@using Blazored.LocalStorage
 @using TimbratureApp.Service
+@using it.Mifram.Dieci3k.DTO.Anagrafiche
+@using it.Mifram.Dieci3k.DTO.Presenze
 @inject IJSRuntime JSRuntime
-@inject TimbratureService TimbratureService
+@inject Dieci3kRestService dieci3KRestService
 @inject NavigationManager navigationManager;
+@inject ILocalStorageService localStorage
 
-<div style="font-family: 'Franklin Gothic'" class="container my-5">
-    <h1 class="display-4 text-center mb-4">Timbratura perzonalizzata</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg rounded-3">
-                <div class="card-body p-4">
-                    <div class="form-group">
-                        <label for="datetime-picker">Scegli data e ora:</label>
-                        <input type="datetime-local" id="datetime-picker" class="form-control" @bind="DataOraSelezionata" />
-                        <br />
-                    </div>
-                    <table class="table table-bordered">
-                        <tbody>
-                            @if (_coordinates != null)
-                            {
-                                <tr>
-                                    <td class="info-label">Coordinate:</td>
-                                    <td class="info-value">
-                                        Latitudine: @_coordinates.Latitude / Longitudine: @_coordinates.Longitude
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
 
-                    @if (_error != null)
-                    {
-                        <div class="alert alert-danger text-center" role="alert">
-                            Error: @_error
+<div style="font-family: 'Franklin Gothic'"  class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg rounded-3">
+                    <div class="card-body p-4">
+                        <h1 class="display-4 text-center mb-4">Timbratura</h1>
+
+                        <div class="form-group mb-3">
+                            <h5><label for="datetime-picker" class="form-label">Scegli data e ora:</label></h5>
+                            <input type="datetime-local" id="datetime-picker" class="form-control" @bind="DataOraSelezionata" />
                         </div>
-                    }
-                    else if (_coordinates == null)
-                    {
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
+
+                        @if (_coordinates != null)
+                        {
+                            <div class="mb-3">
+                            <h5><label class="form-label">Coordinate:</label></h5>
+                                <p class="form-control-plaintext">
+                                    Latitudine: @_coordinates.Latitude / Longitudine: @_coordinates.Longitude
+                                </p>
                             </div>
+                        }
+
+
+                        <div class="mb-3">
+                            <h5><label for="Note" class="form-label">Note:</label></h5>
+                            <textarea id="Note" class="form-control" @bind="note" placeholder="Inserisci una nota" rows="1"></textarea>
                         </div>
-                    }
-                    <button class="btn btn-primary d-block mx-auto mt-3" @onclick="Timbra">Timbra</button>
-                    <br />
-                    @if (MostraMessaggioSuccesso)
-                    {
-                        <p style="text-align:center;color:green">@messaggioSuccesso</p>
-                    }
-                    <br />
-                    <NavLink class="btn btn-warning d-block mx-auto" href="/timbratura">Torna alla pagina delle timbrature</NavLink>
-                    <br />
-                    <NavLink class="btn btn-danger d-block mx-auto" href="/timbratureavvenute">Vai alle timbrature avvenute</NavLink>
+
+                        @if (_error != null)
+                        {
+                            <div class="alert alert-danger text-center" role="alert">
+                                Error: @_error
+                            </div>
+                        }
+                        else if (_coordinates == null)
+                        {
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" @onclick="Timbra">Timbra</button>
+                            <NavLink class="btn btn-danger" href="/timbratureavvenute">Vai alle timbrature avvenute</NavLink>
+                        </div>
+
+
+                        @if (MostraMessaggioSuccesso)
+                        {
+                            <div class="alert alert-success text-center mt-3" role="alert">
+                                @messaggioSuccesso
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 @code {
     private GeolocationCoordinates? _coordinates;
     private string? _error;
@@ -67,7 +77,13 @@
     private DateTime DataOraSelezionata = DateTime.Now;
     public string messaggioSuccesso = "";
     private bool MostraMessaggioSuccesso = false;
+    public string messaggioErrore = "";
+    private bool MostraMessaggioErrore = false;
     private Timer? _timerMessaggio;
+    private int dipId { get; set; }
+    private string origine { get; set; } = "";
+    private string note { get; set; } = "";
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,39 +118,84 @@
         }
     }
 
-    private void Timbra()
+    public async Task Timbra()
     {
-        if (_coordinates != null)
+        try
         {
-            TimbratureService.Timbrature.Add(new TimbraturaPersona
-                {
-                    DataOra = DataOraSelezionata,
-                    Latitudine = _coordinates.Latitude,
-                    Longitudine = _coordinates.Longitude,
-                    IdUtente = 1 // Sostituisci con il tuo metodo per ottenere l'ID utente
-                });
+            string token = await localStorage.GetItemAsync<string>("TokenString");
 
-            messaggioSuccesso = "Timbratura salvata con successo!";
-            MostraMessaggioSuccesso = true; // Mostra il messaggio
+            int utenteId = await localStorage.GetItemAsync<int>("IdDip");
 
-            // Imposta il timer per nascondere il messaggio dopo 1 secondo
-            _timerMessaggio = new Timer(2000);
-            _timerMessaggio.Elapsed += (sender, e) =>
+            if (string.IsNullOrEmpty(token))
             {
-                MostraMessaggioSuccesso = false; // Nascondi il messaggio
-                InvokeAsync(StateHasChanged); // Aggiorna l'interfaccia utente
-                _timerMessaggio.Dispose(); // Smaltisci il timer
-            };
-            _timerMessaggio.Start();
+                navigationManager.NavigateTo("/");
+                return; // Important: Exit the method after redirecting
+            }
 
-            StateHasChanged();
+            int result = await dieci3KRestService.FaiTimbratura(token, new TimbraturaDTO
+                {
+                    DipendenteId = utenteId,
+                    Latitudine = _coordinates.Latitude.ToString(),
+                    Longitudine = _coordinates.Longitude.ToString(),
+                    DataTimbratura = DataOraSelezionata,
+                    Source = origine,
+                    Note = note
+                });
+                Console.WriteLine(result);
+            if (result >= 0)
+            {
+                List<TimbraturaDTO> timbratureList = await localStorage.GetItemAsync<List<TimbraturaDTO>>("TimbratureList") ?? new List<TimbraturaDTO>();
+                timbratureList.Add(new TimbraturaDTO
+                    {
+                        DipendenteId = utenteId,
+                        Latitudine = _coordinates.Latitude.ToString(),
+                        Longitudine = _coordinates.Longitude.ToString(),
+                        DataTimbratura = DataOraSelezionata,
+                        Source = origine,
+                        Note = note
+                    });
+                await localStorage.SetItemAsync("TimbratureList", timbratureList);
+
+                messaggioSuccesso = "Timbratura salvata con successo!";
+                MostraMessaggioSuccesso = true;
+
+                _timerMessaggio = new Timer(2000);
+                _timerMessaggio.Elapsed += (sender, e) =>
+                {
+                    MostraMessaggioSuccesso = false;
+                    InvokeAsync(StateHasChanged);
+                    _timerMessaggio.Dispose();
+                };
+                _timerMessaggio.Start();
+            }
+            else
+            {
+                // More specific error handling based on result (if available)
+                messaggioErrore = "Errore durante la timbratura.";
+                MostraMessaggioErrore = true;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _error = "Coordinate non disponibili";
-        }
-    }
+            Console.WriteLine("Error in Timbra method: " + ex.Message);
 
+            if (ex is HttpRequestException ||
+                ex.Message.Contains("401") || // Unauthorized
+                ex.Message.Contains("403"))   // Forbidden
+            {
+                messaggioErrore = "Sessione scaduta. Effettua nuovamente il login.";
+                MostraMessaggioErrore = true;
+            }
+            else
+            {
+                messaggioErrore = "Errore durante la timbratura. Riprova più tardi.";
+                MostraMessaggioErrore = true;
+            }
+        }
+
+        StateHasChanged();
+    }
+  
     public class GeolocationCoordinates
     {
         public double Latitude { get; set; }

@@ -101,3 +101,8 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+.truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Impedisce l'andata a capo del testo */
+}

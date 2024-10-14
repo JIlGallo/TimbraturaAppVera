@@ -5,6 +5,18 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimbratureApp", "TimbratureApp\TimbratureApp.csproj", "{669D552B-2CA0-489A-A388-EE3B5FC0E368}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.DataAccessLayer", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.DataAccessLayer\it.Mifram.Dieci3k.DataAccessLayer.csproj", "{F5B2F369-83DA-48AC-BF85-3CED1ADD2BA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.Enums.NetSt", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.Enums.NetSt\it.Mifram.Dieci3k.Enums.NetSt.csproj", "{F55FF36B-E7E3-4D44-B7AE-E6FF41676A2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.Web.DataAccessLayer", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.Web.DataAccessLayer\it.Mifram.Dieci3k.Web.DataAccessLayer.csproj", "{1FB7192E-859F-47DC-8963-70A09440112C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.DataTrasportObject", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.DataTrasportObject\it.Mifram.Dieci3k.DataTrasportObject.csproj", "{E294D9D0-3CF5-4D55-A505-5374A2AC44DB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.WebServices", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\WebServices\it.Mifram.Dieci3k.WebServices.csproj", "{81FBBA4E-B45D-4D96-A054-314FA61C672B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "it.Mifram.Dieci3k.Exceptions", "..\..\..\..\..\..\Lavoro\MiframGit\it.mifram.dieci3k\it.Mifram.Dieci3k.Exceptions\it.Mifram.Dieci3k.Exceptions.csproj", "{47AC0FCD-6BAA-4CCB-BB8F-497D24A885B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +27,30 @@ Global
 		{669D552B-2CA0-489A-A388-EE3B5FC0E368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{669D552B-2CA0-489A-A388-EE3B5FC0E368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{669D552B-2CA0-489A-A388-EE3B5FC0E368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B2F369-83DA-48AC-BF85-3CED1ADD2BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B2F369-83DA-48AC-BF85-3CED1ADD2BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B2F369-83DA-48AC-BF85-3CED1ADD2BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B2F369-83DA-48AC-BF85-3CED1ADD2BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F55FF36B-E7E3-4D44-B7AE-E6FF41676A2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F55FF36B-E7E3-4D44-B7AE-E6FF41676A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F55FF36B-E7E3-4D44-B7AE-E6FF41676A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F55FF36B-E7E3-4D44-B7AE-E6FF41676A2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FB7192E-859F-47DC-8963-70A09440112C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FB7192E-859F-47DC-8963-70A09440112C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FB7192E-859F-47DC-8963-70A09440112C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FB7192E-859F-47DC-8963-70A09440112C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E294D9D0-3CF5-4D55-A505-5374A2AC44DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E294D9D0-3CF5-4D55-A505-5374A2AC44DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E294D9D0-3CF5-4D55-A505-5374A2AC44DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E294D9D0-3CF5-4D55-A505-5374A2AC44DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FBBA4E-B45D-4D96-A054-314FA61C672B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FBBA4E-B45D-4D96-A054-314FA61C672B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FBBA4E-B45D-4D96-A054-314FA61C672B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FBBA4E-B45D-4D96-A054-314FA61C672B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47AC0FCD-6BAA-4CCB-BB8F-497D24A885B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47AC0FCD-6BAA-4CCB-BB8F-497D24A885B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47AC0FCD-6BAA-4CCB-BB8F-497D24A885B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47AC0FCD-6BAA-4CCB-BB8F-497D24A885B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
