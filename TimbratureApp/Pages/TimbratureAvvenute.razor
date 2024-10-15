@@ -54,9 +54,18 @@
     </div>
 </div>
 @code {
-    List<TimbraturaDTO> timbratureList;
+    List<TimbraturaDTO>? timbratureList;
     protected override async Task OnInitializedAsync()
     {
         timbratureList = await localStorage.GetItemAsync<List<TimbraturaDTO>>("TimbratureList") ?? new List<TimbraturaDTO>();
+
+        if (timbratureList != null)
+        {
+            timbratureList = timbratureList.OrderByDescending(t => t.DataTimbratura).ToList();
+        }
+        else
+        {
+            timbratureList = new List<TimbraturaDTO>();
+        }
     }
 }

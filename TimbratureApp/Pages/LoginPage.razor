@@ -47,29 +47,28 @@
     private string Password { get; set; } = "";
     private string ErrorMessage { get; set; } = "";
     private bool IsLoading { get; set; } = false;
-
+    private int idCompany = 5008;
     private async Task HandleSubmit()
     {
-        ErrorMessage = ""; // Reset errore
+        ErrorMessage = "";
         IsLoading = true;
 
-        /*
+
         // 1. Ottieni l'ID dell'azienda
         CompanyDTO azienda = await dieci3KRestService.GetCompanyNameAsync("Crioline");
-            if (azienda == null)
-            {
+        if (azienda == null)
+        {
             ErrorMessage = "Azienda non trovata.";
-        return;
+            return;
         }
-        */
+
 
         // 2. Crea l'oggetto UtenteAppDTO per l'autenticazione
         var utenteLogin = new UtenteAppDTO
             {
                 Username = Username,
                 Password = Password,
-                //Company = azienda,
-                CompanyId = 5008
+                CompanyId = idCompany
             };
 
 
@@ -83,21 +82,13 @@
             ErrorMessage = "Autenticazione fallita. Verifica le credenziali.";
             return;
         }
-       
-        
-            await localStorage.SetItemAsync<string>("TokenString", utenteLogin.Token);
-            await localStorage.SetItemAsync<int>("IdDip", utenteLogin.DipendenteId);
-
-            // 5. Reindirizza l'utente alla pagina protetta
-            NavigationManager.NavigateTo("/timbra");
-        
-
-        
 
 
+        await localStorage.SetItemAsync<string>("TokenString", utenteLogin.Token);
+        await localStorage.SetItemAsync<int>("IdDip", utenteLogin.DipendenteId);
 
+        // 5. Reindirizza l'utente alla pagina protetta
+        NavigationManager.NavigateTo("/timbra");
 
-
-        // chiamata su Timbratura controller per effettuare la timbratura        
     }
 }

@@ -1,22 +1,42 @@
 {
-  "name": "TimbratureApp",
+  "name": "App Timbrature",
   "short_name": "TimbratureApp",
-  "id": "./",
+  "id": "./", // o "/" se vuoi che la PWA controlli l'intero dominio
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#03173d",
+  "background_color": "#ffffff", // Esempio: bianco
+  "theme_color": "#007bff", // Esempio: blu primario di Bootstrap
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "Immagini/iconMask.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-192.png",
+      "src": "Immagini/iconMask.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Immagini/iconMask.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Immagini/iconMask.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Immagini/iconMask.png",
+      "type": "image/png",
+      "sizes": "384x384",
+      "purpose": "any maskable"
     }
   ]
 }
