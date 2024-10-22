@@ -1,0 +1,94 @@
+﻿@page "/"
+@using Blazored.LocalStorage
+@using TimbraApp.Service
+@using it.Mifram.Dieci3k.DTO.Anagrafiche
+@using it.Mifram.Dieci3k.DTO.Support
+@inject Dieci3kRestService dieci3KRestService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService localStorage
+
+<div style="font-family: 'Franklin Gothic'" class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-md-4">
+            <h1 class="text-center mb-4">Login</h1>
+            <form @onsubmit="HandleSubmit" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required @bind="Username" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required @bind="Password" />
+                </div>
+                <br />
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center" disabled="@IsLoading">
+                        @if (IsLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Caricamento...</span>
+                        }
+                        else
+                        {
+                            <span>Login</span>
+                        }
+                    </button>
+                </div>
+                @if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3">@ErrorMessage</div>
+                }
+            </form>
+        </div>
+    </div>
+</div>
+@code {
+    private string Username { get; set; } = "";
+    private string Password { get; set; } = "";
+    private string ErrorMessage { get; set; } = "";
+    private bool IsLoading { get; set; } = false;
+    private int idCompany = 5008;
+    private async Task HandleSubmit()
+    {
+        ErrorMessage = "";
+        IsLoading = true;
+
+
+        // 1. Ottieni l'ID dell'azienda
+        CompanyDTO azienda = await dieci3KRestService.GetCompanyNameAsync("Crioline");
+        if (azienda == null)
+        {
+            ErrorMessage = "Azienda non trovata.";
+            return;
+        }
+
+
+        // 2. Crea l'oggetto UtenteAppDTO per l'autenticazione
+        var utenteLogin = new UtenteAppDTO
+            {
+                Username = Username,
+                Password = Password,
+                CompanyId = idCompany
+            };
+
+
+
+        // 3. Chiama l'API per ottenere il token
+
+        utenteLogin = await dieci3KRestService.GetUserTokenAsync(utenteLogin);
+
+        if (utenteLogin == null || string.IsNullOrEmpty(utenteLogin.Token))
+        {
+            ErrorMessage = "Autenticazione fallita. Verifica le credenziali.";
+            return;
+        }
+
+
+        await localStorage.SetItemAsync<string>("TokenString", utenteLogin.Token);
+        await localStorage.SetItemAsync<int>("IdDip", utenteLogin.DipendenteId);
+
+        // 5. Reindirizza l'utente alla pagina protetta
+        NavigationManager.NavigateTo("/timbra");
+
+    }
+}
