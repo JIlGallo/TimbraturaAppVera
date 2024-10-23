@@ -1,22 +1,31 @@
 {
-  "name": "TimbraApp",
-  "short_name": "TimbraApp",
-  "id": "./",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#03173d",
-  "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    }
-  ]
-}
+  
+    "name": "Timbrature App",
+    "short_name": "TimbraApp",
+    "id": "/timbraapp/", // O l'URL completo
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#03173d",
+    "prefer_related_applications": false,
+    "icons": [
+      {
+        "src": "Immagini/Crioline.png",
+        "type": "image/png",
+        "sizes": "100x100",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "Immagini/Crioline192.png",
+        "type": "image/png",
+        "sizes": "192x192",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "Immagini/Crioline 3.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any maskable"
+      }
+    ]
+  }
